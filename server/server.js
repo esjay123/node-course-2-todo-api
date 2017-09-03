@@ -30,6 +30,21 @@ app.get('/todos', (req, res) => {
     res.status(400).send(e);
   });
 });
+app.delete('/todos', (req, res) => {
+  var id = req.body.id;
+  if (!ObjectID.isValid(id)) {
+    return res.status(404).send();
+  }
+
+  Todo.findByIdAndRemove(id).then((doc) => {
+    if (doc.length === 0) {
+      return res.status(404).send();
+    }
+    res.send(doc);
+  }, (e) => {
+    res.status(400).send(e);
+  });
+});
 
 app.get('/todos/:id', (req, res) => {
   var id = req.params.id;
